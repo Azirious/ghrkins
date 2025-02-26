@@ -1,31 +1,7 @@
-Feature: User Management API
-
-  Background:
-    # Configure global variables or authentication if needed
-    * def baseUrl = 'http://localhost:8080'  # or your real endpoint
-
-  Scenario: Create a new user
-    Given url baseUrl
-    And path 'users'
-    And request { 
-      "name": "John Doe", 
-      "role": "admin" 
-    }
-    When method POST
-    Then status 201
-    And match response == { 
-      "id": "#notnull", 
-      "name": "John Doe", 
-      "role": "admin" 
-    }
-
-  Scenario: Get user by ID
-    Given url baseUrl
-    And path 'users/123'  # replace 123 with a valid ID if needed
-    When method GET
-    Then status 200
-    And match response == { 
-      "id": "#number",
-      "name": "#string",
-      "role": "#string"
-    }
+Feature: Google Searching
+  As a web surfer, I want to search Google, so that I can learn new things.
+  
+  Scenario: Simple Google search
+    Given a web browser is on the Google page
+    When the search phrase "panda" is entered
+    Then results for "panda" are shown
