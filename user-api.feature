@@ -1,17 +1,31 @@
-Feature: Test User API Endpoints
+Feature: User Management API
 
   Background:
-    * url 'https://jsonplaceholder.typicode.com'
-    * header Accept = 'application/json'
+    # Configure global variables or authentication if needed
+    * def baseUrl = 'http://localhost:8080'  # or your real endpoint
 
-  Scenario: Get a user by ID and verify response
-    Given path '/users/1'
+  Scenario: Create a new user
+    Given url baseUrl
+    And path 'users'
+    And request { 
+      "name": "John Doe", 
+      "role": "admin" 
+    }
+    When method POST
+    Then status 201
+    And match response == { 
+      "id": "#notnull", 
+      "name": "John Doe", 
+      "role": "admin" 
+    }
+
+  Scenario: Get user by ID
+    Given url baseUrl
+    And path 'users/123'  # replace 123 with a valid ID if needed
     When method GET
     Then status 200
-    And match response == { id: 1, name: '#string', username: '#string', email: '#string' }
-    And assert responseTime < 1000
-
-  Scenario: Attempt to get a non-existent user
-    Given path '/users/999'
-    When method GET
-    Then status 404
+    And match response == { 
+      "id": "#number",
+      "name": "#string",
+      "role": "#string"
+    }
